@@ -11,6 +11,37 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <div>
+            <form id="form-articulo">
+            <fieldset>
+                    <legend>Datos del articulo:</legend>
+                    <div>
+                        <label>Codigo: <input type="text" name="codigo"></label>
+                    </div>
+                    <div>
+                        <label>Nombre: <input type="text" name="nombre"></label>
+                    </div>
+                    <div>
+                        <label>Valor: <input type="text" name="valor"></label>
+                    </div>
+                    <div>
+                        <button type="submit">Guardar</button>
+                    </div>
+            </fieldset>
+                </form>
+                    </div>
+                        <script src="/jquery-1.11.3.min"></script>
+                        <script type="text/javascript">
+                            $('#form-articulo').on('submit',function(event){
+                                event.preventDefault();
+                                var datos = $(this).serialize();
+                                $.ajax({
+                                    url: '/api/articulo',
+                                    data: datos,
+                                    type: 'POST'
+                                });
+                            });
+                        </script>
+        
     </body>
 </html>
