@@ -13,10 +13,10 @@ import javax.persistence.Id;
 
 /**
  *
- * @author sala403e15
+ * @author Juansa
  */
 @Entity
-public class Articulo  implements Serializable{
+public class Articulo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,7 +55,6 @@ public class Articulo  implements Serializable{
     public void setValor(Double valor) {
         this.valor = valor;
     }
-    
     
     
 }

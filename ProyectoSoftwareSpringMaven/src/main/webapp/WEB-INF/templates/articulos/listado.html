@@ -13,35 +13,78 @@ and open the template in the editor.
     <body>
         <div>
             <form id="form-articulo">
-            <fieldset>
-                    <legend>Datos del articulo:</legend>
+                <fieldset>
+                    <legend>Datos del artículo</legend>
                     <div>
-                        <label>Codigo: <input type="text" name="codigo"></label>
+                        <label>Código: <input type="text" name="codigo"></label>
                     </div>
                     <div>
                         <label>Nombre: <input type="text" name="nombre"></label>
                     </div>
                     <div>
-                        <label>Valor: <input type="text" name="valor"></label>
-                    </div>
-                    <div>
                         <button type="submit">Guardar</button>
                     </div>
-            </fieldset>
-                </form>
-                    </div>
-                        <script src="/jquery-1.11.3.min"></script>
-                        <script type="text/javascript">
-                            $('#form-articulo').on('submit',function(event){
-                                event.preventDefault();
-                                var datos = $(this).serialize();
-                                $.ajax({
-                                    url: '/api/articulo',
-                                    data: datos,
-                                    type: 'POST'
-                                });
-                            });
-                        </script>
-        
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <table id="table-articulos">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <script src="/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript">
+            function llenarTablas(){
+                $.ajax({
+                   url: '/api/articulos',
+                   type: 'GET'
+               }).done(function(data){
+                   var tbody = $('#table-articulos tbody');
+                   tbody.empty();
+                   $.each(data, function(i, articulo){
+                      var tr = $('<tr>') ;
+                      var td_codigo = $('<td>');
+                      td_codigo.html(articulo.codigo);
+                      var td_nombre = $('<td>');
+                      var td_acciones =$('<td>');
+                      td_acciones.html('<a href="#">Editar</a>');
+                      td_nombre.html(articulo.nombre);
+                      tr.append(td_codigo);
+                      tr.append(td_nombre);
+                      tr.append(td_acciones);
+                      tbody.append(tr);
+                   });
+               }); 
+            }
+            $(document).ready(function(){
+               llenarTablas();
+            });
+            
+            $('#form-articulo').on('submit', function(event) {
+                event.preventDefault();
+                var datos = $(this).serialize();
+                $.ajax({
+                    url: '/api/articulos',
+                    data: datos,
+                    type: 'POST'
+                }).done(function (){
+                 alert('EL articulo fue Guardado correctamente.');
+                 $('input[name="codigo"]').val("");
+                 $('input[name="nombre"]').val("");
+                 llenarTablas();
+                }).fail(function (){
+                 alert('EL articulo no fue Guardado.');
+                });
+            });
+        </script>
     </body>
 </html>

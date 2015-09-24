@@ -11,15 +11,14 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Component;
 import org.utb.project.entities.Articulo;
-import org.utb.project.entities.Usuario;
 
 /**
  *
- * @author sala403e15
+ * @author Juansa
  */
 @Component
 public class ArticuloDao {
-     @PersistenceContext
+    @PersistenceContext
     EntityManager entityManager;
 
     @Transactional
@@ -30,7 +29,7 @@ public class ArticuloDao {
 
     @Transactional
     public List<Articulo> listar() {
-        List<Articulo> usuarios = entityManager.createQuery("SELECT a FROM Articulo a").getResultList();
-        return usuarios;
+        List<Articulo> articulos = entityManager.createQuery("SELECT a FROM Articulo a").getResultList();
+        return articulos;
     }
 }
