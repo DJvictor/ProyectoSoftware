@@ -43,6 +43,7 @@ and open the template in the editor.
         </div>
         <script src="/jquery-1.11.3.min.js"></script>
         <script type="text/javascript">
+            var idArticulo = 0;
             function llenarTablas(){
                 $.ajax({
                    url: '/api/articulos',
@@ -56,7 +57,32 @@ and open the template in the editor.
                       td_codigo.html(articulo.codigo);
                       var td_nombre = $('<td>');
                       var td_acciones =$('<td>');
-                      td_acciones.html('<a href="#">Editar</a>');
+                      var a_editar =$('<a href="#">Editar</a>');
+                      a_editar.on('click', function(){
+                          event.preventDefault();
+                          var datos = $(this).serialize();
+                          var url = (idArticulo === 0) ? '/api/articulos' : '/api/articulos/'+articulo.id;
+                          var type = (idArticulo === 0) ? 'POST' : 'PUT';
+                          $.ajax({
+                              url: '/api/articulos/'+articulo.id,
+                              type: 'GET'
+                          }).done(function (data){
+                              idArticulo = data.id; 
+                              $('input[name="codigo"]').val(data.codigo);
+                              $('input[name="nombre"]').val(data.nombre);
+                          });
+                      });
+                      td_acciones.append(a_editar);
+                      td_acciones.append('\t');
+                      var a_eliminar = $('<a href="#">Eliminar</a>');
+                      td_acciones.on('click',function (event){
+                          event.preventDefault();
+                          if(confirm("Esta seguro que desea borrar este articulo")){
+                              $.ajax({
+                                  url: 
+                              })
+                          }
+                      });
                       td_nombre.html(articulo.nombre);
                       tr.append(td_codigo);
                       tr.append(td_nombre);
@@ -80,6 +106,7 @@ and open the template in the editor.
                  alert('EL articulo fue Guardado correctamente.');
                  $('input[name="codigo"]').val("");
                  $('input[name="nombre"]').val("");
+                 idArticulo = 0; 
                  llenarTablas();
                 }).fail(function (){
                  alert('EL articulo no fue Guardado.');

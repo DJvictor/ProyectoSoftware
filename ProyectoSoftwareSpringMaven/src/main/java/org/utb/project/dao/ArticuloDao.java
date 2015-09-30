@@ -26,10 +26,29 @@ public class ArticuloDao {
         entityManager.persist(articulo);
         entityManager.flush();
     }
+    
+    @Transactional
+    public void editar(Articulo articulo) {
+        entityManager.merge(articulo);
+        entityManager.flush();
+    }
 
     @Transactional
     public List<Articulo> listar() {
         List<Articulo> articulos = entityManager.createQuery("SELECT a FROM Articulo a").getResultList();
         return articulos;
+    }
+    
+    @Transactional
+    public Articulo obtener(Long id) {
+        Articulo articulos = entityManager.find(Articulo.class, id);
+        return articulos;
+    }
+    
+    @Transactional
+    public void eliminar(Long id) {
+        entityManager.find(Articulo.class, id);
+        entityManager.remove(id);
+        entityManager.flush();
     }
 }
