@@ -36,27 +36,28 @@ public class ArticulosController {
         articuloDao.agregar(articulo);
     }
     
-    @RequestMapping(path = "/api/articulos", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public List<Articulo> listar(){
-        return articuloDao.listar();
-    }
-    
-     @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public Articulo obtener(@PathVariable Long id){
-        return articuloDao.obtener(id);
-    }
-    @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.PUT, produces = "application/json")
-    @ResponseBody
-    public void editar(@PathVariable Long id, @ModelAttribute Articulo articulo){
+    public void editar(@PathVariable Long id, @ModelAttribute Articulo articulo) {
         articulo.setId(id);
         articuloDao.editar(articulo);
     }
     
-    @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void eliminar(@PathVariable Long id){
-        articuloDao.eliminar(id);
+    public void borrar(@PathVariable Long id) {
+        articuloDao.borrar(id);
+    }
+    
+    @RequestMapping(path = "/api/articulos", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Articulo> listar() {
+        return articuloDao.listar();
+    }
+    
+    @RequestMapping(path = "/api/articulos/{id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Articulo obtener(@PathVariable("id") Long id) {
+        return articuloDao.obtener(id);
     }
 }
