@@ -12,14 +12,14 @@ and open the template in the editor.
     </head>
     <body>
         <div>
-            <form id="form-categorias">
+            <form id="form-categoria">
                 <fieldset>
                     <legend>Datos de la categoria</legend>
                     <div>
-                        <label>Nombre: <input type="text" name="nombre"></label>
+                        <label>Código: <input type="text" name="codigo"></label>
                     </div>
                     <div>
-                        <label>Tipo: <input type="text" name="tipo"></label>
+                        <label>Nombre: <input type="text" name="nombre"></label>
                     </div>
                     <div>
                         <button type="submit">Guardar</button>
@@ -31,8 +31,8 @@ and open the template in the editor.
             <table id="table-categorias">
                 <thead>
                     <tr>
+                        <th>Código</th>
                         <th>Nombre</th>
-                        <th>Tipo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -54,8 +54,8 @@ and open the template in the editor.
                     tbody.empty();
                     $.each(data, function(i, categoria) {
                         var tr = $('<tr>');
-                        var td_tipo = $('<td>');
-                        td_tipo.html(categoria.tipo);                       
+                        var td_codigo = $('<td>');
+                        td_codigo.html(categoria.codigo);
                         var td_nombre = $('<td>');
                         td_nombre.html(categoria.nombre);
                         var td_acciones = $('<td>');
@@ -66,9 +66,9 @@ and open the template in the editor.
                                 url: '/api/categorias/' + categoria.id,
                                 type: 'GET'
                             }).done(function(data) {
-                                idACategoria = data.id;
+                                idCategoria = data.id;
+                                $('input[name="codigo"]').val(data.codigo);
                                 $('input[name="nombre"]').val(data.nombre);
-                                $('input[name="tipo"]').val(data.tipo);
                             });
                         });
                         td_acciones.append(a_editar);
@@ -86,8 +86,8 @@ and open the template in the editor.
                             }
                         });
                         td_acciones.append(a_eliminar);
+                        tr.append(td_codigo);
                         tr.append(td_nombre);
-                        tr.append(td_tipo);                        
                         tr.append(td_acciones);
                         tbody.append(tr);
                     });
@@ -96,7 +96,7 @@ and open the template in the editor.
             $(document).ready(function() {
                 llenarTabla();
             });
-            $('#form-categorias').on('submit', function(event) {
+            $('#form-categoria').on('submit', function(event) {
                 event.preventDefault();
                 var datos = $(this).serialize();
                 
@@ -109,8 +109,8 @@ and open the template in the editor.
                     type: type
                 }).done(function() {
                     alert('El artículo fue guardado correctamente');
+                    $('input[name="codigo"]').val("");
                     $('input[name="nombre"]').val("");
-                    $('input[name="tipo"]').val("");
                     idCategoria = 0;
                     llenarTabla();
                 }).fail(function() {

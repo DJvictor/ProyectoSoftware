@@ -44,7 +44,7 @@ public class CategoriaDao {
 
     @Transactional
     public List<Categoria> listar() {
-        List<Categoria> categoria = entityManager.createQuery("SELECT a FROM Articulo a").getResultList();
+        List<Categoria> categoria = entityManager.createQuery("SELECT a FROM Categoria a").getResultList();
         return categoria;
     }
     
