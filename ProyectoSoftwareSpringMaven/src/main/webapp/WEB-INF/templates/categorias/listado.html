@@ -43,7 +43,7 @@ and open the template in the editor.
         </div>
         <script src="/jquery-1.11.3.min.js"></script>
         <script type="text/javascript">
-            var idArticulo = 0;
+            var idCategoria = 0;
             
             function llenarTabla() {
                 $.ajax({
@@ -55,9 +55,9 @@ and open the template in the editor.
                     $.each(data, function(i, categoria) {
                         var tr = $('<tr>');
                         var td_tipo = $('<td>');
-                        td_nombre.html(categoria.tipo);                       
+                        td_tipo.html(categoria.tipo);                       
                         var td_nombre = $('<td>');
-                        td_tipo.html(categoria.nombre);
+                        td_nombre.html(categoria.nombre);
                         var td_acciones = $('<td>');
                         var a_editar = $('<a href="#">Editar</a>');
                         a_editar.on('click', function(event) {
@@ -66,7 +66,7 @@ and open the template in the editor.
                                 url: '/api/categorias/' + categoria.id,
                                 type: 'GET'
                             }).done(function(data) {
-                                idArticulo = data.id;
+                                idACategoria = data.id;
                                 $('input[name="nombre"]').val(data.nombre);
                                 $('input[name="tipo"]').val(data.tipo);
                             });
