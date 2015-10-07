@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <form id="form-categorias">
+                <fieldset>
+                    <legend>Datos de la categoria</legend>
+                    <div>
+                        <label>Nombre: <input type="text" name="nombre"></label>
+                    </div>
+                    <div>
+                        <label>Tipo: <input type="text" name="tipo"></label>
+                    </div>
+                    <div>
+                        <button type="submit">Guardar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <table id="table-categorias">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <script src="/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript">
+            var idArticulo = 0;
+            
+            function llenarTabla() {
+                $.ajax({
+                    url: '/api/categorias',
+                    type: 'GET'
+                }).done(function(data) {
+                    var tbody = $('#table-categorias tbody');
+                    tbody.empty();
+                    $.each(data, function(i, categoria) {
+                        var tr = $('<tr>');
+                        var td_tipo = $('<td>');
+                        td_nombre.html(categoria.tipo);                       
+                        var td_nombre = $('<td>');
+                        td_tipo.html(categoria.nombre);
+                        var td_acciones = $('<td>');
+                        var a_editar = $('<a href="#">Editar</a>');
+                        a_editar.on('click', function(event) {
+                            event.preventDefault();
+                            $.ajax({
+                                url: '/api/categorias/' + categoria.id,
+                                type: 'GET'
+                            }).done(function(data) {
+                                idArticulo = data.id;
+                                $('input[name="nombre"]').val(data.nombre);
+                                $('input[name="tipo"]').val(data.tipo);
+                            });
+                        });
+                        td_acciones.append(a_editar);
+                        td_acciones.append(' ');
+                        var a_eliminar = $('<a href="#">Eliminar</a>');
+                        a_eliminar.on('click', function(event) {
+                            event.preventDefault();
+                            if(confirm("Esta seguro de que desea borrar este artículo?")) {
+                                $.ajax({
+                                    url: '/api/categorias/' + categoria.id,
+                                    type: 'DELETE'
+                                }).done(function() {
+                                    llenarTabla();
+                                });
+                            }
+                        });
+                        td_acciones.append(a_eliminar);
+                        tr.append(td_nombre);
+                        tr.append(td_tipo);                        
+                        tr.append(td_acciones);
+                        tbody.append(tr);
+                    });
+                });
+            }
+            $(document).ready(function() {
+                llenarTabla();
+            });
+            $('#form-categorias').on('submit', function(event) {
+                event.preventDefault();
+                var datos = $(this).serialize();
+                
+                var url = (idCategoria === 0) ? '/api/categorias' : '/api/categorias/' + idCategoria;
+                var type = (idCategoria === 0) ? 'POST' : 'PUT';
+                
+                $.ajax({
+                    url: url,
+                    data: datos,
+                    type: type
+                }).done(function() {
+                    alert('El artículo fue guardado correctamente');
+                    $('input[name="nombre"]').val("");
+                    $('input[name="tipo"]').val("");
+                    idCategoria = 0;
+                    llenarTabla();
+                }).fail(function() {
+                    alert('No se pudo guardar');
+                });
+            });
+        </script>
+    </body>
+</html>
